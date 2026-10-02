@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Forever Young · 动作预览</title>
+<style>body{font-family:system-ui,sans-serif;background:#eee9e6;color:#31292c;max-width:780px;margin:40px auto;padding:0 24px}h1{font-size:27px}p{line-height:1.7}.stage{border:1px solid #ccc3c3;background:#f8f7f6;border-radius:16px;height:360px;display:grid;place-items:center}.pet{width:192px;height:208px;background-image:url('package/forever-young/spritesheet.webp');background-size:1536px 1872px;transform:scale(1.4);transform-origin:center}select,button{font:inherit;padding:8px 12px;margin:12px 6px 12px 0;border:1px solid #b8acb0;border-radius:8px;background:white}audio{width:100%;max-width:450px}.note{color:#73666c;font-size:14px}a{color:#8b344e}</style>
+<h1>フォーエバーヤング</h1><p>青春永驻 · Forever Young<br>官方决胜服参考，Q 版动画素材预览。</p>
+<div class="stage" id="stage"><div class="pet" id="pet" role="img" aria-label="青春永驻动画"></div></div>
+<select id="state" aria-label="动作"><option value="0">待机 / 呼吸与眨眼</option><option value="1">向右跑</option><option value="2">向左跑</option><option value="3">挥手</option><option value="4">跳跃</option><option value="5">失落</option><option value="6">等待回应</option><option value="7">专注工作</option><option value="8">审阅</option></select>
+<button id="pause">暂停</button><button id="theme">深色背景</button>
+<p>官方角色语音 · CV：海弓シュリ</p><audio controls preload="metadata" src="official-voice.mp3"></audio>
+<p class="note">原始音频取自 Cygames 官方角色页，未合成、未剪辑。本页面手动播放语音；Codex 的 hatch-pet 配置没有已确认的音频触发接口。预览展示保存的动画素材，不是客户端录屏。</p>
+<p><a href="https://umamusume.jp/character/foreveryoung">官方角色与决胜服资料</a></p>
+<script>
+const durations=[[280,110,110,140,140,320],[120,120,120,120,120,120,120,220],[120,120,120,120,120,120,120,220],[140,140,140,280],[140,140,140,140,280],[140,140,140,140,140,140,140,240],[150,150,150,150,150,260],[120,120,120,120,120,220],[150,150,150,150,150,280]];
+let row=0,frame=0,paused=false,timer, dark=false;
+const pet=document.getElementById('pet'),state=document.getElementById('state');
+function paint(){pet.style.backgroundPosition=(-192*frame)+'px '+(-208*row)+'px'}
+function tick(){paint();timer=setTimeout(()=>{if(!paused){frame=(frame+1)%durations[row].length;tick()}},durations[row][frame])}
+state.onchange=()=>{clearTimeout(timer);row=Number(state.value);frame=0;paint();if(!paused)tick()};
+document.getElementById('pause').onclick=e=>{paused=!paused;e.target.textContent=paused?'继续':'暂停';clearTimeout(timer);if(!paused)tick()};
+document.getElementById('theme').onclick=e=>{dark=!dark;document.getElementById('stage').style.background=dark?'#24212b':'#f8f7f6';e.target.textContent=dark?'浅色背景':'深色背景'};tick();
+</script></html>
